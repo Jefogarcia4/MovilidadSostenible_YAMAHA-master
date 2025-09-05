@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .custom-ok-button-warning {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .form-check-input {
+        transform: scale(1.5);
+        accent-color: #007bff; /* elige el color que prefieras */
+        margin-right: 0.5rem;
+    }
+</style>
+<form>
+    <div class="card">
+        <div class="card-body">
+            <div class="text-center">
+                <div style="text-align:justify; margin-left: 20px;">
+                    <center><h6><strong>AUTORIZACIÓN TRATAMIENTO DE DATOS PERSONALES</strong></h6></center>
+                    <p>
+                        <h7>
+                            <p>
+                                Al diligenciar el presente formulario, usted, como titular de la información, autoriza expresamente el tratamiento de sus datos personales por parte de Incolmotos Yamaha S.A., con NIT 890.916.911, 
+                                como responsable de la información. Estos datos serán tratados de conformidad con las políticas de protección de datos personales que se encuentran publicadas en nuestra página web:
+                                <a href="https://www.incolmotos-yamaha.com.co/habeas-data/" target="_blank">https://www.incolmotos-yamaha.com.co/habeas-data/</a>. Además, acepta que la información proporcionada sea utilizada 
+                                para dar cumplimiento al contrato entre las partes, al cumplimiento de obligaciones legales o contractuales del responsable, con fines administrativos, estadísticos y de información.
+                                Esta información, en caso de que Incolmotos Yamaha S.A. así lo considere, será transferida a terceros, nacionales o extranjeros (naturales o jurídicos), en calidad de encargados del tratamiento, 
+                                con los cuales contrate actividades de cualquier tipo, quienes darán a la base de datos el uso informado en la presente.
+                                Se le informa que usted, como titular, tiene los derechos consagrados en el artículo 8 de la Ley 1581 de 2012:
+                            </p>
+                            <p>A) Conocer, actualizar y rectificar sus datos.</p>
+                            <p>B) Solicitar prueba de su autorización.</p>
+                            <p>C) Ser informado sobre el uso que se le ha dado a sus datos.</p>
+                            <p>D) Presentar quejas ante la SIC por infracciones.</p>
+                            <p>E) Revocar su autorización de acuerdo con el procedimiento creado por la SIC.</p>
+                            <p>F) Acceder gratuitamente a sus datos personales. El responsable del tratamiento es: Incolmotos
+                            Yamaha S.A. Dirección: Km. 20 Autopista Norte, costado oriental, vía Girardota, Antioquia. Correo:
+                            <strong>info@incolmotos-yamaha.com.co</strong></p>
+                        </h7>
+                    </p>
+                    <div style="margin-bottom:10px;"></div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck" required>
+                            <label class="form-check-label" for="gridCheck">
+                                <strong>Acepto tratamiento de datos personales.</strong>
+                            </label>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-dark me-2" onclick="handleSubmit(event)">Continuar</button>
+                                <button type="button" class="btn btn-danger me-2" onclick="redirectToView()">Ver resultados</button>
+                                <button type="button" class="btn btn-dark" onclick="redirectToViewPointsAttention()">Puntos de Atención</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </<div>
+    </<div>
+</form>
+@section scripts{
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            var checkBox = document.getElementById('gridCheck');
+
+            if (checkBox.checked) {
+                window.location.href = '/Encuesta';
+            } else {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Por favor, acepte el tratamiento de datos personales para continuar.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'custom-ok-button-warning'
+                    }
+                });
+            }
+        }
+
+        function redirectToView() {
+            window.location.href = '@Url.Action("Index", "Resultados")';
+        }
+
+        function redirectToViewPointsAttention() {
+            window.location.href = '@Url.Action("Index", "PuntosAtencion")';
+        }
+    </script>
+}
+
+
+
+
+

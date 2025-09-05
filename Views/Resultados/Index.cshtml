@@ -1,0 +1,108 @@
+﻿@model List<MovilidadSostenible_YAMAHA.Models.ResultadoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .input-group .btn {
+        margin-left: 1px; 
+    }
+
+</style>
+<h2 class="text-center">RESULTADOS ENCUESTA DE MOVILIDAD SOSTENIBLE - YAMAHA:</h2>
+<div class="card">
+    <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupPrepend2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <input type="number" class="form-control" id="myInput" onkeyup="filter()" placeholder="Buscar por Número de Identificación..." aria-describedby="inputGroupPrepend2">
+                            <div class="input-group-append">
+                            <button class="btn btn-dark" id="exportarTabla">
+                                    <i class="bi bi-box-arrow-up-right"></i> Exportar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            <div style="overflow-x: auto; overflow-y: auto; max-height: 400px;">
+                <table class="table table-hover table-bordered" id="myTable" style="min-width: 1000px;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 150px;">Fecha Registro</th>
+                            <th scope="col" style="width: 200px;">Nombre Completo</th>
+                            <th scope="col" style="width: 150px;">Cédula Ciudadania</th>
+                            <th scope="col" style="width: 250px;">Modo Transporte Habitual</th>
+                            <th scope="col" style="width: 200px;">EmisiónCO2 (Kg/Día) Ida</th>
+                            <th scope="col" style="width: 200px;">EmisiónCO2 (Kg/Día) Regreso</th>
+                            <th scope="col" style="width: 200px;">EmisiónCO2 (Semanal)</th>
+                            <th scope="col" style="width: 200px;">EmisiónCO2 (Anual)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var resultado in Model)
+                        {
+                            <tr>
+                                <td>@resultado.Fecha.ToString("yyyy-MM-dd")</td>
+                                <td>@resultado.NombreCompleto</td>
+                                <td>@resultado.NumeroIdentificacion</td>
+                                <td>@resultado.MedioTransporteHabitualIda</td>
+                                <td>@resultado.EmisionKgCO2_Dia_Ida</td>
+                                <td>@resultado.EmisionKgCO2_Dia_Regreso</td>
+                                <td>@resultado.EmisionKgCO2_Semana</td>
+                                <td>@resultado.EmisionKgCO2_Anual</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+         </div>
+    </div>
+</div>
+@section scripts{
+<script>
+        function filter() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+        document.getElementById('exportarTabla').addEventListener('click', function () {
+
+            fetch('/exportar')
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'encuesta_xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error('Error al exportar:', error));
+        });
+</script>
+}

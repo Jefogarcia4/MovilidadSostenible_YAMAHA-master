@@ -1,0 +1,13 @@
+services:
+  web:
+    image: 907951345693.dkr.ecr.us-east-1.amazonaws.com/huellacarbono:latest
+    container_name: movilidad-web
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_NAME: "${DB_NAME}"
+      DB_HOST: "${DB_HOST}"

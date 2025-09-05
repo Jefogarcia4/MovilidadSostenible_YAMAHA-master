@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Puntos de Atención";
+}
+
+<style>
+    #mapmarcadores {
+        height: 500px;
+        width: 100%;
+    }
+</style>
+<h1 class="text-center">PUNTOS DE ATENCIÓN</h1>
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <select id="tiendayamaha" typeof="text" class="form-select">
+                        <option selected>Tienda Yamaha</option>
+                        <option>Repuestos</option>
+                        <option>Servicio Técnico</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="departamentos" typeof="text" class="form-select">
+                        <option value="" id="departamentos2">Seleccione un Departamento</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="ciudades" typeof="text" class="form-select">
+                        <option value="" id="ciudades2">Seleccione una Ciudad</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="puntoatencion" typeof="text" class="form-select">
+                        <option selected>Punto</option>
+                        <option>Yamaha Guayabal</option>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div id="mapmarcadores"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            loadDepartments();
+
+            $('#departamentos').change(function () {
+                var departmentCode = $(this).val();
+                if (departmentCode) {
+                    loadCities(departmentCode);
+                } else {
+                    $('#ciudades').html('<option value="">Seleccione una Ciudad</option>');
+                }
+            });
+        });
+
+        function loadDepartments() {
+            $.ajax({
+                url: '/api/Geographical/departamentos',
+                method: 'GET',
+                success: function (data) {
+                    var $departamentos = $('#departamentos');
+                    $departamentos.empty();
+                    $departamentos.append('<option value="">Seleccione un Departamento</option>');
+                    $.each(data, function (i, departamento) {
+                        $departamentos.append($('<option>', {
+                            value: departamento.id,
+                            text: departamento.name
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.error('Error cargando los departamentos:', error);
+                }
+            });
+        }
+
+        function loadCities(departamentoId) {
+            $.ajax({
+                url: '/api/Geographical/ciudades/' + departamentoId,
+                method: 'GET',
+                success: function (data) {
+                    var $ciudades = $('#ciudades');
+                    $ciudades.empty();
+                    $ciudades.append('<option value="">Seleccione una Ciudad</option>');
+                    $.each(data, function (i, ciudad) {
+                        $ciudades.append($('<option>', {
+                            value: ciudad.id,
+                            text: ciudad.name
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.error('Error cargando las ciudades:', error);
+                }
+            });
+        }
+
+        function initMap() {
+            const location = { lat: 6.216845187104437, lng: -75.5811379187294 };
+
+            const map = new google.maps.Map(document.getElementById("mapmarcadores"), {
+                zoom: 15,
+                center: location,
+            });
+
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: "",
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: "<h3>Yamaha.Guayabal.S.A</h3><p>Cerca de, Cra. 52 #10-170 a 10-272, Guayabal, Medellín, Guayabal, Medellín, Antioquia</p>",
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+}

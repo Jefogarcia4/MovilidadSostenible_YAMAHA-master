@@ -1,0 +1,449 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <label>Fecha diligenciamiento:</label>
+        <input type="date" class="form-control" id="fecha" name="fecha" required>
+    </div>
+    <div class="col-md-4">
+        <label>Nombre completo:</label>
+        <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" placeholder="Escriba su nombre completo..." aria-label="Nombre completo" required>
+    </div>
+    <div class="col-md-4">
+        <label>Tipo identificación:</label>
+        <select id="tipoIdentificacion" name="tipoIdentificacion" typeof="text" class="form-select">
+            <option selected>Cedula Ciudadania</option>
+            <option>Cedula Extranjeria</option>
+            <option>Pasaporte</option>
+            <option>Registro Civil</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Número identificación:</label>
+        <input type="number" id="numeroidentificacion" name="numeroidentificacion" class="form-control" placeholder="Escriba número identificación..." aria-label="Numero Identificacion" min="0" required>
+    </div>
+    <div class="col-md-4">
+        <label>Fecha nacimiento:</label>
+        <input type="date" id="fechanacimiento" name="fechanacimiento" class="form-control" aria-label="Fecha nacimiento">
+    </div>
+    <div class="col-md-4">
+        <label>Género:</label>
+        <select id="genero" typeof="text" name="genero" class="form-select">
+            <option selected>Masculino</option>
+            <option>Femenino</option>
+            <option>Prefiero no decirlo</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Rango edad:</label>
+        <select id="rangoEdad" typeof="text" class="form-select">
+            <option selected>10-25</option>
+            <option>26-30</option>
+            <option>31-35</option>
+            <option>36-40</option>
+            <option>41-45</option>
+            <option>46-50</option>
+            <option>51-55</option>
+            <option>56-60</option>
+            <option>61-65</option>
+            <option>más de 65</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Tipo contrato:</label>
+        <select id="tipoContrato" typeof="text" class="form-select">
+            <option selected>Indefinido</option>
+            <option>Termino Fijo</option>
+            <option>Prestación de Servicios</option>
+            <option>Contratista</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Cargo que desempeñas:</label>
+        <input type="text" id="cargo" class="form-control" placeholder="Escriba el cargo que desempeña..." aria-label="Cargo trabajador">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Área de trabajo:</label>
+        <select id="areatrabajo" typeof="text" class="form-select">
+            <option selected>Administrativo</option>
+            <option>Operativo</option>
+            <option>Comercial</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Departamento:</label>
+        <select id="departamentos"  typeof="text" class="form-select">
+            <option value="" id="departamentos2">Seleccione un Departamento</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Ciudad:</label>
+        <select id="ciudades" name="ciudades" typeof="text" class="form-select">
+            <option value="" id="ciudades2">Seleccione una Ciudad</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Nombre barrio residencia:</label>
+        <input type="text" id="nombrebarrio" name="nombrebarrio" class="form-control" placeholder="Escriba el nombre de su barrio..." aria-label="Nombre barrio">
+    </div>
+    <div class="col-md-4">
+        <label>Dirección:</label> <span style="font-size:10px;">(confirme el punto. En caso de no ser el correcto, por favor movilizar el indicador en la pantalla)</span>
+        <input type="text" id="punto-partida" name="punto-partida" class="form-control" placeholder="Escriba dirección residencia..." aria-label="Direccion residencia">
+    </div>
+    <div class="col-md-4">
+        <label>Estrato:</label>
+        <select id="estrato" typeof="text" class="form-select">
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>¿Tiene un sitio fijo de trabajo?:</label>
+        <select id="sitiotrabajo" typeof="text" class="form-select">
+            <option selected>Si</option>
+            <option>No</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Dirección sitio fijo de trabajo:</label>
+        <select id="lugarTrabajoSelect" class="form-select mb-2">
+            <option value="">Seleccione un lugar predefinido</option>
+        </select>
+        <input type="text" id="punto-regreso" class="form-control" placeholder="O escriba dirección trabajo..." aria-label="Direccion Trabajo">
+    </div>
+    <div class="col-md-4">
+        <label>Promedio de días presenciales trabajados (semanal/mensual):</label>
+        <select id="diaspromediotrabajados" typeof="text" class="form-select">
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+        </select>
+    </div>
+    <div class="col-md-12">
+        <div id="informacion-ruta1" style="margin-top: 20px;"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="map1" style="height: 500px; width: 100%;"></div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <button id="btnContinuarIda" class="btn btn-dark btn-lg btn-block">Continuar</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        loadDepartments();
+        loadLugaresTrabajo();
+
+        $('#departamentos').change(function () {
+            var departmentCode = $(this).val();
+            if (departmentCode) {
+                loadCities(departmentCode);
+            } else {
+                $('#ciudades').html('<option value="">Seleccione una Ciudad</option>');
+            }
+        });
+
+        // Manejar selección de lugar predefinido
+        $('#lugarTrabajoSelect').change(function () {
+            var selectedId = $(this).val();
+            if (selectedId) {
+                var selectedOption = $(this).find('option:selected');
+                var direccion = selectedOption.data('direccion');
+                var latitud = selectedOption.data('latitud');
+                var longitud = selectedOption.data('longitud');
+
+                console.log('Lugar seleccionado:', direccion, latitud, longitud);
+
+                // Llenar el input con la dirección
+                $('#punto-regreso').val(direccion);
+
+                // Actualizar el mapa con la posición y calcular ruta INMEDIATAMENTE
+                if (latitud && longitud) {
+                    // Calcular ruta directamente sin esperas
+                    calcularRutaDirecta(latitud, longitud, direccion);
+                }
+            } else {
+                // Si se deselecciona, limpiar el input
+                $('#punto-regreso').val('');
+                limpiarMapaYRuta();
+            }
+        });
+    });
+
+    function loadDepartments() {
+        $.ajax({
+            url: '/api/Geographical/departamentos',
+            method: 'GET',
+            success: function (data) {
+                var $departamentos = $('#departamentos');
+                $departamentos.empty();
+                $departamentos.append('<option value="">Seleccione un Departamento</option>');
+                $.each(data, function (i, departamento) {
+                    $departamentos.append($('<option>', {
+                        value: departamento.id,
+                        text: departamento.name
+                    }));
+                });
+            },
+            error: function (error) {
+                console.error('Error cargando los departamentos:', error);
+            }
+        });
+    }
+
+    function loadCities(departamentoId) {
+        $.ajax({
+            url: '/api/Geographical/ciudades/' + departamentoId,
+            method: 'GET',
+            success: function (data) {
+                var $ciudades = $('#ciudades');
+                $ciudades.empty();
+                $ciudades.append('<option value="">Seleccione una Ciudad</option>');
+                $.each(data, function (i, ciudad) {
+                    $ciudades.append($('<option>', {
+                        value: ciudad.id,
+                        text: ciudad.name
+                    }));
+                });
+            },
+            error: function (error) {
+                console.error('Error cargando las ciudades:', error);
+            }
+        });
+    }
+
+    function loadLugaresTrabajo() {
+        $.ajax({
+            url: '/api/Lugar',
+            method: 'GET',
+            success: function (data) {
+                var $select = $('#lugarTrabajoSelect');
+                $select.empty();
+                $select.append('<option value="">Seleccione un lugar predefinido</option>');
+                
+                $.each(data, function (i, lugar) {
+                    $select.append($('<option>', {
+                        value: lugar.id,
+                        text: lugar.nombre,
+                        'data-direccion': lugar.direccion,
+                        'data-latitud': lugar.latitud,
+                        'data-longitud': lugar.longitud
+                    }));
+                });
+            },
+            error: function (error) {
+                console.error('Error cargando lugares de trabajo:', error);
+                $('#lugarTrabajoSelect').append('<option value="">Error cargando lugares</option>');
+            }
+        });
+    }
+
+    function calcularRutaDirecta(latitud, longitud, direccion) {
+        console.log('=== INICIANDO CÁLCULO DIRECTO DE RUTA ===');
+        console.log('Destino:', direccion, 'Coords:', latitud, longitud);
+        
+        var direccionPartida = $('#punto-partida').val();
+        console.log('Origen:', direccionPartida);
+
+        if (!direccionPartida || direccionPartida.trim() === '') {
+            console.log('No hay dirección de partida');
+            $('#informacion-ruta1').html('<div class="alert alert-warning">Ingrese una dirección de partida para calcular la ruta.</div>');
+            return;
+        }
+
+        // Verificar que Google Maps esté disponible
+        if (typeof google === 'undefined' || !google.maps) {
+            console.error('Google Maps no está cargado');
+            return;
+        }
+
+        // Crear instancias propias para esta función
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        
+        // Verificar que el mapa existe
+        if (typeof maps === 'undefined' || !maps[0]) {
+            console.error('Mapa no disponible');
+            return;
+        }
+
+        // Configurar el renderer en el mapa
+        directionsRenderer.setMap(maps[0]);
+
+        var destino = new google.maps.LatLng(parseFloat(latitud), parseFloat(longitud));
+
+        console.log('Calculando ruta...');
+        directionsService.route({
+            origin: direccionPartida,
+            destination: destino,
+            travelMode: google.maps.TravelMode.DRIVING
+        }, function(response, status) {
+            console.log('Resultado de la ruta:', status);
+            
+            if (status === 'OK') {
+                console.log('✅ RUTA CALCULADA EXITOSAMENTE');
+                
+                // Mostrar la ruta en el mapa
+                directionsRenderer.setDirections(response);
+                
+                // Guardar el renderer globalmente para futuras limpiezas
+                if (typeof directionsRenderers !== 'undefined' && directionsRenderers[0]) {
+                    directionsRenderers[0] = directionsRenderer;
+                }
+
+                // Mostrar información de la ruta
+                var route = response.routes[0];
+                var leg = route.legs[0];
+                var distanciaModificada = leg.distance.text.replace(',', '.');
+                
+                $('#informacion-ruta1').html(
+                    '<div class="alert alert-success">' +
+                    '<strong>Ruta calculada:</strong><br>' +
+                    'Tiempo estimado: ' + leg.duration.text + '<br>' +
+                    'Distancia total: ' + distanciaModificada +
+                    '</div>'
+                );
+
+                // Crear marcadores
+                crearMarcadores(leg.start_location, destino, direccionPartida, direccion);
+
+                // Ajustar la vista del mapa para mostrar toda la ruta
+                maps[0].fitBounds(route.bounds);
+
+            } else {
+                console.error('❌ Error calculando la ruta:', status);
+                $('#informacion-ruta1').html(
+                    '<div class="alert alert-danger">' +
+                    'Error calculando la ruta: ' + status + '<br>' +
+                    'Verifique la dirección de partida.' +
+                    '</div>'
+                );
+            }
+        });
+    }
+
+    function crearMarcadores(origenCoords, destinoCoords, direccionOrigen, direccionDestino) {
+        console.log('Creando marcadores...');
+        
+        // Asegurar que markers[1] existe
+        if (typeof markers !== 'undefined') {
+            if (!markers[1]) {
+                markers[1] = { A: null, B: null };
+            }
+
+            // Limpiar marcadores existentes
+            if (markers[1].A) {
+                markers[1].A.setMap(null);
+            }
+            if (markers[1].B) {
+                markers[1].B.setMap(null);
+            }
+
+            // Crear marcador A (origen)
+            markers[1].A = new google.maps.Marker({
+                position: origenCoords,
+                map: maps[0],
+                title: direccionOrigen,
+                draggable: true,
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                }
+            });
+
+            // Crear marcador B (destino)
+            markers[1].B = new google.maps.Marker({
+                position: destinoCoords,
+                map: maps[0],
+                title: direccionDestino,
+                draggable: true,
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                }
+            });
+
+            // Agregar listeners a los marcadores
+            markers[1].A.addListener('dragend', function () {
+                if (typeof updateAddress === 'function') {
+                    updateAddress(markers[1].A.getPosition(), document.getElementById('punto-partida'));
+                }
+                recalcularRutaConMarcadores();
+            });
+
+            markers[1].B.addListener('dragend', function () {
+                if (typeof updateAddress === 'function') {
+                    updateAddress(markers[1].B.getPosition(), document.getElementById('punto-regreso'));
+                }
+                recalcularRutaConMarcadores();
+            });
+
+            console.log('Marcadores creados exitosamente');
+        }
+    }
+
+    function recalcularRutaConMarcadores() {
+        if (typeof markers !== 'undefined' && markers[1] && markers[1].A && markers[1].B) {
+            if (typeof calculateAndDisplayRoute === 'function' && 
+                typeof directionsServices !== 'undefined' && directionsServices[0] &&
+                typeof directionsRenderers !== 'undefined' && directionsRenderers[0] &&
+                typeof routeInfos !== 'undefined' && routeInfos[0]) {
+                
+                calculateAndDisplayRoute(1, directionsServices[0], directionsRenderers[0], 
+                    markers[1].A.getPosition(), markers[1].B.getPosition(), routeInfos[0]);
+            }
+        }
+    }
+
+    function limpiarMapaYRuta() {
+        console.log('Limpiando mapa y ruta...');
+        
+        // Limpiar marcadores
+        if (typeof markers !== 'undefined' && markers[1]) {
+            if (markers[1].A) {
+                markers[1].A.setMap(null);
+                markers[1].A = null;
+            }
+            if (markers[1].B) {
+                markers[1].B.setMap(null);
+                markers[1].B = null;
+            }
+        }
+        
+        // Limpiar ruta
+        if (typeof directionsRenderers !== 'undefined' && directionsRenderers[0]) {
+            directionsRenderers[0].setDirections({routes: []});
+        }
+        
+        // Limpiar información
+        $('#informacion-ruta1').html('');
+    }
+
+    // Función legacy para mantener compatibilidad
+    function actualizarMapaConLugar(latitud, longitud, direccion) {
+        calcularRutaDirecta(latitud, longitud, direccion);
+    }
+
+    function calcularRutaAB() {
+        // Esta función se mantiene para compatibilidad con el sistema existente
+        console.log('calcularRutaAB llamada - redirigiendo a recalcularRutaConMarcadores');
+        recalcularRutaConMarcadores();
+    }
+</script>

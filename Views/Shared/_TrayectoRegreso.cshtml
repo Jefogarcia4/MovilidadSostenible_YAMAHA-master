@@ -1,0 +1,280 @@
+﻿<div class="row">
+    <div class="col-md-5">
+        <label>¿Qué modo de transporte utiliza para regresar del trabajo?</label>
+        <select id="modotransporteregreso" typeof="text" class="form-select">
+            <option selected>Transporte Propio</option>
+            <option>Transporte Público</option>
+            <option>Compartido, no propio</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="tiempodesplazamientoregreso">Tiempo ida aproximado:</label>
+        <input type="text"
+               id="tiempodesplazamientoregreso"
+               class="form-control"
+               placeholder="hh:mm"
+               pattern="^([0-9]{1,2}):[0-5][0-9]$"
+               title="Ingrese duración en formato hh:mm (por ejemplo 2:30, 12:05)">
+    </div>
+    <div class="col-md-4">
+        <label>Medio de transporte que utiliza:</label>
+        <select id="mediotransportehabitualregreso" class="form-select"></select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Tipo combustible:</label>
+        <select id="tipocombustibleregreso" typeof="text" class="form-select">
+            <option selected>Diesel</option>
+            <option>Gasolina</option>
+            <option>GNV</option>
+            <option>Electricidad</option>
+            <option>Hibrido</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Modelo del vehículo:</label>
+        <input type="number" id="modelovehiculoregreso" class="form-control" placeholder="Escriba el modelo vehículo..." aria-label="Modelo Vehiculo" min="0" max="2025">
+    </div>
+    <div class="col-md-4">
+        <label>Cilindraje:</label>
+        <input type="text" id="cilindrajeregreso" class="form-control" placeholder="Escriba el cilindraje..." aria-label="Cilindraje">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Indique si comparte su vehículo:</label>
+        <select id="compartevehiculoregreso" typeof="text" class="form-select">
+            <option selected>Si</option>
+            <option>No</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>¿cuantas personas de la misma sede viajan en total en el vehículo?</label>
+        <select id="sicompartevehiculoregreso" typeof="text" class="form-select">
+            <option>0</option>
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Nombre completo propietario:</label>
+        <input type="text" id="nombrepropietarioregreso" class="form-control" placeholder="Escriba el Nombre Completo..." aria-label="Nombre Propietario">
+    </div>
+</div>
+<br />
+
+<div id="trayectosRegresoMapas" style="display:none;">
+    @await Html.PartialAsync("_TrayectosRegresoMapas")
+</div>
+<br>
+<div class="row">
+    <button id="btnEnviarEncuesta" type="submit" class="btn btn-dark btn-lg btn-block">Enviar encuesta</button>
+</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/tipoDeVehiculos/ObtenerTiposDeVehiculos',
+            type: 'GET',
+            success: function (data) {
+                var select = $('#mediotransportehabitualregreso');
+                select.empty();
+                var mediotransporte5 = $('#medio-transporte-5');
+                mediotransporte5.empty();
+                var mediotransporte6 = $('#medio-transporte-6');
+                mediotransporte6.empty();
+                var mediotransporte7 = $('#medio-transporte-7');
+                mediotransporte7.empty();
+                $.each(data, function (i, vehiculo) {
+                    select.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte5.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte6.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte7.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                });
+            },
+            error: function () {
+                alert('Error al cargar los tipos de vehículos.');
+            }
+        });
+    });
+
+    const inputregreso = document.getElementById('costosemanalregreso');
+        inputregreso.addEventListener('input', function () {
+            let value = inputregreso.value;
+            value = value.replace(/\D/g, '');
+            value = new Intl.NumberFormat('es-CO').format(value);
+            inputregreso.value = value;
+        });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modoTransporteSelect = document.getElementById('modotransporteregreso');
+        const tiempoDesplazamiento = document.getElementById('tiempodesplazamientoregreso');
+        const medioTransporteHabitual = document.getElementById('mediotransportehabitualregreso');
+        const tipoCombustible = document.getElementById('tipocombustibleregreso');
+        const modeloVehiculo = document.getElementById('modelovehiculoregreso');
+        const cilindraje = document.getElementById('cilindrajeregreso');
+        const comparteVehiculoSelect = document.getElementById('compartevehiculoregreso');
+        const siComparteVehiculoSelect = document.getElementById('sicompartevehiculoregreso');
+        const nombrePropietario = document.getElementById('nombrepropietarioregreso');
+        const trayectosIdaMapasDiv = document.getElementById('trayectosRegresoMapas');
+
+        const campos = [
+            modeloVehiculo,
+            cilindraje,
+            comparteVehiculoSelect,
+            siComparteVehiculoSelect,
+            nombrePropietario
+        ];
+
+        function toggleFields() {
+            const selectedValue = modoTransporteSelect.value;
+            trayectosIdaMapasDiv.style.display = 'none';
+
+            tiempoDesplazamiento.disabled = true;
+            medioTransporteHabitual.disabled = true;
+            tipoCombustible.disabled = true;
+            campos.forEach(campo => campo.disabled = true);
+
+            if (selectedValue === 'Transporte Propio') {
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                comparteVehiculoSelect.value = "Si";
+                siComparteVehiculoSelect.value = "1";
+                campos.forEach(campo => campo.disabled = false);
+            } else if (selectedValue === 'Transporte Público') {
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                comparteVehiculoSelect.value = "No";
+                siComparteVehiculoSelect.value = "0";
+                trayectosIdaMapasDiv.style.display = 'block';
+            } else if (selectedValue === 'Compartido, no propio') {
+                comparteVehiculoSelect.value = "No";
+                siComparteVehiculoSelect.value = "0";
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                nombrePropietario.disabled = false;
+            }
+        }
+
+        function toggleSiComparteVehiculo() {
+            if (comparteVehiculoSelect.value === 'Si') {
+                siComparteVehiculoSelect.disabled = false;
+                siComparteVehiculoSelect.value = "1";
+            } else {
+                siComparteVehiculoSelect.disabled = true;
+                siComparteVehiculoSelect.value = "0";
+            }
+        }
+
+        modoTransporteSelect.addEventListener('change', function () {
+            toggleFields();
+        });
+
+        comparteVehiculoSelect.addEventListener('change', toggleSiComparteVehiculo);
+
+        // Inicializar la lógica
+        toggleFields();
+        toggleSiComparteVehiculo();
+    });
+
+    function obtenerDatosEncuesta() {
+        return {
+            fecha: document.getElementById('fecha').value,
+            nombreCompleto: document.getElementById('nombreCompleto').value,
+            tipoIdentificacion: document.getElementById('tipoIdentificacion').value,
+            numeroIdentificacion: document.getElementById('numeroidentificacion').value,
+            fechaNacimiento: document.getElementById('fechanacimiento').value,
+            genero: document.getElementById('genero').value,
+            rangoEdad: document.getElementById('rangoEdad').value,
+            tipoContrato: document.getElementById('tipoContrato').value,
+            cargo: document.getElementById('cargo').value,
+            areaTrabajo: document.getElementById('areatrabajo').value,
+            departamento: $('#departamentos option:selected').text(),
+            ciudad: $('#ciudades option:selected').text(),
+            nombreBarrio: document.getElementById('nombrebarrio').value,
+            direccion: document.getElementById('punto-partida').value,
+            estrato: document.getElementById('estrato').value,
+            sitioTrabajo: document.getElementById('sitiotrabajo').value,
+            direccionSitioTrabajo: document.getElementById('punto-regreso').value,
+            diasPromedioTrabajados: document.getElementById('diaspromediotrabajados').value,
+            distanciaSedeResidencia: document.getElementById('informacion-ruta1').innerHTML,
+
+            modoTransporteida: document.getElementById('modotransporte').value,
+            tiempoDesplazamientoida: document.getElementById('tiempodesplazamiento').value,
+            medioTransporteHabitualidaid: document.getElementById('mediotransportehabitual').value,
+            tipoCombustibleida: document.getElementById('tipocombustible').value,
+            modeloVehiculoida: document.getElementById('modelovehiculo').value,
+            cilindrajeida: document.getElementById('cilindraje').value,
+            comparteVehiculoida: document.getElementById('compartevehiculo').value,
+            siComparteVehiculoida: document.getElementById('sicompartevehiculo').value,
+            nombrePropietariovehiculoida: document.getElementById('nombrepropietario').value,
+
+            mediotransporteidatrayecto1id: document.getElementById('medio-transporte-1').value,
+            puntopartidaidatrayecto1: document.getElementById('punto-partida-2').value,
+            puntodestinoidatrayecto1: document.getElementById('punto-regreso-2').value,
+            distanciaidatrayecto1: document.getElementById('informacion-ruta2').innerHTML,
+
+            mediotransporteidatrayecto2id: document.getElementById('medio-transporte-2').value,
+            puntopartidaidatrayecto2: document.getElementById('punto-partida-3').value,
+            puntodestinoidatrayecto2: document.getElementById('punto-regreso-3').value,
+            distanciaidatrayecto2: document.getElementById('informacion-ruta3').innerHTML,
+
+            mediotransporteidatrayecto3id: document.getElementById('medio-transporte-4').value,
+            puntopartidaidatrayecto3: document.getElementById('punto-partida-4').value,
+            puntodestinoidatrayecto3: document.getElementById('punto-regreso-4').value,
+            distanciaidatrayecto3: document.getElementById('informacion-ruta4').innerHTML,
+            costosemanalsistematransporteida: document.getElementById('costosemanalida').value,
+
+            modoTransporteregreso: document.getElementById('modotransporteregreso').value,
+            tiempoDesplazamientoregreso: document.getElementById('tiempodesplazamientoregreso').value,
+            medioTransporteHabitualregresoid: document.getElementById('mediotransportehabitualregreso').value,
+            tipoCombustibleregreso: document.getElementById('tipocombustibleregreso').value,
+            modeloVehiculoregreso: document.getElementById('modelovehiculoregreso').value,
+            cilindrajeregreso: document.getElementById('cilindrajeregreso').value,
+            comparteVehiculoregreso: document.getElementById('compartevehiculoregreso').value,
+            siComparteVehiculoregreso: document.getElementById('sicompartevehiculoregreso').value,
+            nombrePropietariovehiculoregreso: document.getElementById('nombrepropietarioregreso').value,
+
+            mediotransporteregresotrayecto1id: document.getElementById('medio-transporte-5').value,
+            puntopartidaregresotrayecto1: document.getElementById('punto-partida-5').value,
+            puntodestinoregresotrayecto1: document.getElementById('punto-regreso-5').value,
+            distanciaregresotrayecto1: document.getElementById('informacion-ruta5').innerHTML,
+
+            mediotransporteregresotrayecto2id: document.getElementById('medio-transporte-6').value,
+            puntopartidaregresotrayecto2: document.getElementById('punto-partida-6').value,
+            puntodestinoregresotrayecto2: document.getElementById('punto-regreso-6').value,
+            distanciaregresotrayecto2: document.getElementById('informacion-ruta6').innerHTML,
+
+            mediotransporteregresotrayecto3id: document.getElementById('medio-transporte-7').value,
+            puntopartidaregresotrayecto3: document.getElementById('punto-partida-7').value,
+            puntodestinoregresotrayecto3: document.getElementById('punto-regreso-7').value,
+            distanciaregresotrayecto3: document.getElementById('informacion-ruta7').innerHTML,
+            costosemanalsistematransporteregreso: document.getElementById('costosemanalregreso').value
+
+        };
+    }
+    
+        document.getElementById("tiempodesplazamientoregreso").addEventListener("blur", function () {
+    const input = this.value;
+        const timePattern = /^([0-9]{1,2}):[0-5][0-9]$/;
+
+    if (!timePattern.test(input)) {
+        Swal.fire({
+                title: 'Advertencia!',
+                text: "Por favor ingrese una hora válida en formato HH:MM",
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'custom-ok-button-warning'
+                }
+            });
+        this.value = "";
+    }
+    });
+</script>

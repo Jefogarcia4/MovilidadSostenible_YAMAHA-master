@@ -1,0 +1,215 @@
+﻿<div class="row">
+    <div class="col-md-5">
+        <label>¿Qué modo de transporte utiliza para ir al trabajo?</label>
+        <select id="modotransporte" typeof="text" class="form-select">
+            <option selected>Transporte Propio</option>
+            <option>Transporte Público</option>
+            <option>Compartido, no propio</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="tiempodesplazamiento">Tiempo ida aproximado:</label>
+        <input type="text"
+               id="tiempodesplazamiento"
+               class="form-control"
+               placeholder="hh:mm"
+               pattern="^([0-9]{1,2}):[0-5][0-9]$"
+               title="Ingrese duración en formato hh:mm (por ejemplo 2:30, 12:05)">
+    </div>
+
+    <div class="col-md-4">
+        <label>Medio de transporte que utiliza:</label>
+        <select id="mediotransportehabitual" class="form-select"></select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Tipo combustible:</label>
+        <select id="tipocombustible" typeof="text" class="form-select">
+            <option selected>Diesel</option>
+            <option>Gasolina</option>
+            <option>GNV</option>
+            <option>Electricidad</option>
+            <option>Hibrido</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Modelo del vehículo:</label>
+        <input type="number" id="modelovehiculo" class="form-control" placeholder="Escriba el modelo vehículo..." aria-label="Modelo Vehiculo" min="0" max="2025">
+    </div>
+    <div class="col-md-4">
+        <label>Cilindraje:</label>
+        <input type="text" id="cilindraje" class="form-control" placeholder="Escriba el cilindraje..." aria-label="Cilindraje">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Indique si comparte su vehículo:</label>
+        <select id="compartevehiculo" typeof="text" class="form-select">
+            <option selected>Si</option>
+            <option>No</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>¿cuantas personas de la misma sede viajan en total en el vehículo?</label>
+        <select id="sicompartevehiculo" typeof="text" class="form-select">
+            <option>0</option>
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Nombre completo propietario:</label>
+        <input type="text" id="nombrepropietario" class="form-control" placeholder="Escriba el Nombre Completo..." aria-label="Nombre Propietario">
+    </div>
+</div>
+<br />
+<div id="trayectosIdaMapas" style="display:none;">
+    @await Html.PartialAsync("_TrayectosIdaMapas")
+</div>
+<br />
+<div class="row">
+    <button id="btnContinuarRegreso" class="btn btn-dark btn-lg btn-block">Continuar</button>
+</div>
+<script>
+        document.getElementById("tiempodesplazamiento").addEventListener("blur", function () {
+        const input = this.value;
+        const timePattern = /^([0-9]{1,2}):[0-5][0-9]$/;
+
+        if (!timePattern.test(input)) {
+            Swal.fire({
+                title: 'Advertencia!',
+                text: "Por favor ingrese una hora válida en formato HH:MM",
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'custom-ok-button-warning'
+                }
+            });
+            this.value = "";
+        }
+    });
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/tipoDeVehiculos/ObtenerTiposDeVehiculos',
+            type: 'GET',
+            success: function (data) {
+                var select = $('#mediotransportehabitual');
+                select.empty();
+                var mediotransporte1 = $('#medio-transporte-1');
+                mediotransporte1.empty();
+                var mediotransporte2 = $('#medio-transporte-2');
+                mediotransporte2.empty();
+                var mediotransporte4 = $('#medio-transporte-4');
+                mediotransporte4.empty();
+                $.each(data, function (i, vehiculo) {
+                    select.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte1.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte2.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                    mediotransporte4.append('<option value="' + vehiculo.tipovehiculoId + '">' + vehiculo.vehiculo + '</option>');
+                });
+            },
+            error: function () {
+                alert('Error al cargar los tipos de vehículos.');
+            }
+        });
+    });
+    
+      // const inputs = document.querySelectorAll('.numericInput');
+      //   function formatNumber(input) {
+      //       let value = input.value;
+      //       value = value.replace(/\D/g, '');
+      //       value = new Intl.NumberFormat('es-CO').format(value);
+      //       input.value = value;
+      //   }
+      //   inputs.forEach(input => {
+      //       input.addEventListener('input', () => formatNumber(input));
+      //   });
+
+    const input = document.getElementById('costosemanalida');
+        input.addEventListener('input', function () {
+            let value = input.value;
+            value = value.replace(/\D/g, '');
+            value = new Intl.NumberFormat('es-CO').format(value);
+            input.value = value;
+        });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modoTransporteSelect = document.getElementById('modotransporte');
+        const tiempoDesplazamiento = document.getElementById('tiempodesplazamiento');
+        const medioTransporteHabitual = document.getElementById('mediotransportehabitual');
+        const tipoCombustible = document.getElementById('tipocombustible');
+        const modeloVehiculo = document.getElementById('modelovehiculo');
+        const cilindraje = document.getElementById('cilindraje');
+        const comparteVehiculoSelect = document.getElementById('compartevehiculo');
+        const siComparteVehiculoSelect = document.getElementById('sicompartevehiculo');
+        const nombrePropietario = document.getElementById('nombrepropietario');
+        const trayectosIdaMapasDiv = document.getElementById('trayectosIdaMapas');
+
+        const campos = [
+            modeloVehiculo,
+            cilindraje,
+            comparteVehiculoSelect,
+            siComparteVehiculoSelect,
+            nombrePropietario
+        ];
+
+        function toggleFields() {
+            const selectedValue = modoTransporteSelect.value;
+            trayectosIdaMapasDiv.style.display = 'none';
+
+            tiempoDesplazamiento.disabled = true;
+            medioTransporteHabitual.disabled = true;
+            tipoCombustible.disabled = true;
+            campos.forEach(campo => campo.disabled = true);
+
+            if (selectedValue === 'Transporte Propio') {
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                comparteVehiculoSelect.value = "Si";
+                siComparteVehiculoSelect.value = "1";
+                campos.forEach(campo => campo.disabled = false);
+            } else if (selectedValue === 'Transporte Público') {
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                comparteVehiculoSelect.value = "No";
+                siComparteVehiculoSelect.value = "0";
+                trayectosIdaMapasDiv.style.display = 'block';
+            } else if (selectedValue === 'Compartido, no propio') {
+                comparteVehiculoSelect.value = "No";
+                siComparteVehiculoSelect.value = "0";
+                tiempoDesplazamiento.disabled = false;
+                medioTransporteHabitual.disabled = false;
+                tipoCombustible.disabled = false;
+                nombrePropietario.disabled = false;
+            }
+        }
+
+        function toggleSiComparteVehiculo() {
+            if (comparteVehiculoSelect.value === 'Si') {
+                siComparteVehiculoSelect.disabled = false;
+                siComparteVehiculoSelect.value = "1";
+            } else {
+                siComparteVehiculoSelect.disabled = true;
+                siComparteVehiculoSelect.value = "0";
+            }
+        }
+
+        modoTransporteSelect.addEventListener('change', function () {
+            toggleFields();
+        });
+
+        comparteVehiculoSelect.addEventListener('change', toggleSiComparteVehiculo);
+
+        // Inicializar la lógica
+        toggleFields();
+        toggleSiComparteVehiculo();
+    });
+</script>
